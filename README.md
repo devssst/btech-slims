@@ -1,6 +1,6 @@
 # 📚 SLIMS - School Library Inventory Management System
 ### 🔰 ALPHA 1.3 - The Readable Hotfix
-![Library Background](assets/images/pack_icon.png)
+![Library Background](assets/images/banner.png)
 
 A modern, web-based library management system designed for **Dalubhasaang Politekniko ng Lungsod ng Baliwag**. Built with vanilla HTML, CSS, and JavaScript, featuring a sleek dark theme with glass morphism design.
 
