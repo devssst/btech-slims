@@ -1,5 +1,12 @@
 {
-    "name": "SLIMS",
-    "banner": "https://raw.githubusercontent.com/devssst/btech-slims/main/assets/images/banner.png",
-    "contributions": "I built a front-end site from the scratch. Create a login UI form, and also build a dashboard with all it's features such as borrow/return, report, list of books/borrowers, sorting systems for various terms such as book/borrower status, dropdowns, and search functionality."
+    "id": "PR-001",
+    "name": "STUDENT LIBRARY INVENTORY MANAGEMENT SYSTEM",
+    "year": 2026,
+    "description": "A web-based library system for librarians, and admins to simplify their works. ",
+    "about": "It is a front-end (for now) web-based library management system that tracks borrower, borrowed, lost, damaged, returned, available books. It also has a built-in report book for students who always forgot where they put their book and a sorting system for librarians so they can easily see what borrowed, available and reported missing. ",
+    "contributions": "I built this website from scratch as part of the submission in our PT101 subject. It is aligned with the goal of hassle-free, smooth transaction, and faster book logging. Just to reduce the burden of librarians.",
+    "stack": ["HTML", "CSS", "JS"],
+    "banner": "https://raw.githubusercontent.com/devssst/btech-slims/main/data/previews/banner.png",
+    "live": "https://devssst.github.io/btech-slims",
+    "source": "https://github.com/devssst/btech-slims"
 }
