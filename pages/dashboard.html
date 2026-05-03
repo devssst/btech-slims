@@ -1,0 +1,738 @@
+<!--
+Note from the Developer VIEN:
+1. For those who are reading the code: If you are not a developer or aspiring developer continuously learning to achieve their goals, you might think that the "modal" used in this code is a verb modifier but IT IS NOT!, a "modal" in this code is used primarily as identifier for POP-UP WINDOWS like add book, dekete book, view book, or similar manners that opens a POP-UP WINDOW is a called a "modal".
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLIMS - Dashboard</title>
+    <meta name="author" content="Developer VIEN">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    <link rel="icon" type="image/png" href="../assets/images/btech_logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body style="background-image: url('../assets/images/library_bg.png'); background-size: cover;">
+    <div class="app-container">
+
+        <!-- Sidebar navigation -->
+        <nav class="sidebar glass-panel">
+            <div class="logo-area">
+                <img src="../assets/images/btech_logo.png" alt="Logo">
+                <h3>AKLATAN AT SINUPAN NG MGA TALA</h3>
+            </div>
+            <ul class="nav-links">
+                <li onclick="switchScreen('main-screen')" class="active" id="nav-main">
+                    <i class="fas fa-home" style="margin-right: 6px; margin-top: 2px; font-size: 20px;"></i> <span style="font-size: 14px;">DASHBOARD</span>
+                </li>
+                <li onclick="switchScreen('borrower-screen')" id="nav-borrowers">
+                    <i class="fas fa-users" style="margin-right: 7px; margin-top: 2px; font-size: 20px;"></i> <span style="font-size: 14px;">BORROWERS</span>
+                </li>
+                <li onclick="switchScreen('book-mgmt-screen')" id="nav-books">
+                    <i class="fas fa-book" style="margin-right: 6px; margin-top: 2px; font-size: 20px;"></i> <span style="font-size: 14px;">INVENTORY</span>
+                </li>
+                <li onclick="switchScreen('logs-screen')" id="nav-logs">
+                    <i class="fas fa-history" style="margin-right: 6px; margin-top: 2px; font-size: 20px;"></i> <span style="font-size: 14px;">SYSTEM LOGS</span>
+                </li>
+                <li onclick="switchScreen('settings-screen')" id="nav-settings">
+                    <i class="fas fa-cog" style="margin-right: 6px; margin-top: 2px; font-size: 20px;"></i> <span style="font-size: 14px;">SETTINGS</span>
+                </li>
+            </ul>
+            <a href="../index.html" class="logout-btn">LOGOUT</a>
+        </nav>
+
+        <!-- Content Area (logs and settings are under construction) -->
+        <div class="content-area glass-panel">
+            <div id="main-screen" class="screen active">
+                <header>
+                    <h2>DASHBOARD OVERVIEW</h2>
+                    <p class="date-display">Loading Date...</p>
+                </header>
+
+                <!-- Statistic Placeholders -->
+                <div class="stats-grid">
+                    <div class="stat-card" onclick="navigateToInventory()" style="cursor: pointer;">
+                        <h3>TOTAL BOOKS</h3>
+                        <h1 id="stat-total-books">--</h1>
+                    </div>
+                    <div class="stat-card" onclick="navigateToBorrowed()" style="cursor: pointer;">
+                        <h3>BORROWED</h3>
+                        <h1 id="stat-borrowed" style="color:var(--status-borrowed)">--</h1>
+                    </div>
+                    <div class="stat-card" onclick="openOverdueModal()" style="cursor: pointer;">
+                        <h3>OVERDUE</h3>
+                        <h1 id="stat-overdue" style="color:var(--status-overdue)">--</h1>
+                    </div>
+                    <div class="stat-card" onclick="openIssuesModal()" style="cursor: pointer;">
+                        <h3>ISSUES</h3>
+                        <h1 id="stat-issues" style="color:var(--status-no-record)">--</h1>
+                    </div>
+                </div>
+
+                <!-- ==================== INSTANT BORROW AND RETURN CARD ==================== -->
+                <!-- Instant Borrow -->
+                <div class="transaction-hub">
+                    <h3><i class="fas fa-bolt" style="margin-right: 6px; margin-top: 2px; font-size: 20px;"></i> BORROW BOOK</h3>
+                    <div class="transaction-form">
+                        <div class="input-group">
+                            <label>STUDENT ID</label>
+                            <input style="font-size: 12px;" type="text" id="instant-borrow-student-id" placeholder="Scan ID...">
+                        </div>
+                        <div class="input-group">
+                            <label>BOOK ISBN</label>
+                            <input style="font-size: 12px;" type="text" id="instant-borrow-isbn" placeholder="Scan ISBN...">
+                        </div>
+                        <div class="input-group" style="flex: 0 0 auto;">
+                            <label>&nbsp;</label>
+                            <button class="action-btn btn-success" onclick="processInstantBorrow()"
+                                style="width: 100%; margin-bottom: 15px;">PROCESS</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instant Return -->
+                <div class="transaction-hub" style="margin-top: 20px;">
+                    <h3><i class="fas fa-undo" style="margin-right: 6px; margin-top: 2px; font-size: 20px;"></i> RETURN BOOK</h3>
+                    <div class="transaction-form">
+                        <div class="input-group">
+                            <label>STUDENT ID</label>
+                            <input style="font-size: 12px;" type="text" id="instant-return-student-id" placeholder="Scan ID...">
+                        </div>
+                        <div class="input-group">
+                            <label>BOOK ISBN</label>
+                            <input style="font-size: 12px;" type="text" id="instant-return-isbn" placeholder="Scan ISBN...">
+                        </div>
+                        <div class="input-group" style="flex: 0 0 auto;">
+                            <label>&nbsp;</label>
+                            <button class="action-btn btn-success" onclick="processInstantReturn()"
+                                style="width: 100%; margin-bottom: 15px;">PROCESS</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Book Button -->
+                <div style="margin-top: 30px; text-align: center;">
+                    <button class="action-btn btn-danger" onclick="openReportBookModal()" style="width: 100%; padding: 15px; border-radius: 12px;">
+                        <i class="fas fa-exclamation-triangle" style="margin-right: 6px; margin-top: 2px; font-size: 20px;"></i> REPORT BOOK
+                    </button>
+                </div>
+            </div>
+
+            <!-- Student Borrower -->
+            <div id="borrower-screen" class="screen hidden">
+                <header>
+                    <h2>STUDENT BORROWERS</h2>
+                </header>
+
+                <div class="section-header">
+                    <div class="table-controls">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="borrower-search" placeholder="Search by Name, Student ID, Course, or Email..." onkeyup="renderBorrowerTable()" style="font-size: 14px;">
+                        </div>
+
+                        <select id="borrower-status-filter" onchange="renderBorrowerTable()">
+                            <option value="all">SHOW ALL STATUS</option>
+                            <option value="overdue">OVERDUE</option>
+                            <option value="reading">CURRENTLY READING</option>
+                            <option value="none">NO BOOKS</option>
+                        </select>
+                    </div>
+                    
+                    <button class="action-btn btn-primary" onclick="openAddBorrowerModal()">+ NEW BORROWER</button>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table" id="borrower-table">
+                        <thead>
+                            <tr>
+                                <th width="5%"></th>
+                                <th width="35%">STUDENT DETAILS</th>
+                                <th width="20%">STUDENT ID</th>
+                                <th width="30%">BORROWING STATUS</th>
+                                <th width="10%">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Book Inventory -->
+            <div id="book-mgmt-screen" class="screen hidden">
+                <header>
+                    <h2>BOOK INVENTORY</h2>
+                </header>
+                <div class="section-header">
+                    <div class="table-controls">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="book-search" placeholder="Search by Title, Author, or ISBN..."
+                                onkeyup="renderBookTable()" style="font-size: 14px;">
+                        </div>
+
+                        <!-- Dropdown Filter -->
+                        <select id="status-filter" onchange="renderBookTable()">
+                            <option value="all">SHOW ALL STATUS</option>
+                            <option value="available">AVAILABLE</option>
+                            <option value="borrowed">BORROWED</option>
+                            <option value="overdue">OVERDUE</option>
+                            <option value="lost">MISSING / DAMAGE</option>
+                        </select>
+                    </div>
+                    <button class="action-btn btn-primary" onclick="openAddBookModal()">+ NEW BOOK</button>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table" id="book-table">
+                        <thead>
+                            <tr>
+                                <th width="5%"></th>
+                                <th width="35%">BOOK DETAILS</th>
+                                <th width="20%">ISBN</th>
+                                <th width="30%">STATUS</th>
+                                <th width="10%">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- System Logs (under construction) -->
+            <div id="logs-screen" class="screen hidden">
+                <header>
+                    <h2>SYSTEM ACTIVITY LOGS</h2>
+                </header>
+                <div id="logs-container" style="margin-top: 20px;">
+                    <div style="padding: 20px; color: #aaa;">No recent activity recorded.</div>
+                </div>
+            </div>
+
+            <!-- Setting screen (under construction) -->
+            <div id="settings-screen" class="screen hidden">
+                <header>
+                    <h2>SYSTEM SETTINGS</h2>
+                </header>
+                <div style="padding: 20px; color: #aaa;">Settings panel under construction.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Book Pop-up -->
+    <div id="add-book-modal" class="modal-overlay">
+        <div class="modal-box glass-panel">
+            <div class="modal-header">
+                <h3>REGISTER NEW BOOK</h3>
+                <i class="fas fa-times close-modal" onclick="closeModal('add-book-modal')"></i>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="new-book-isbn" placeholder="ISBN Number" style="font-size: 14px;">
+                <input type="text" id="new-book-title" placeholder="Book Title" style="font-size: 14px;">
+                <input type="text" id="new-book-author" placeholder="Author Name" style="font-size: 14px;">
+                <textarea id="new-book-desc" rows="3" placeholder="Book Description / Summary" style="font-size: 14px;"></textarea>
+                <input type="number" id="new-book-quantity" placeholder="Quantity" min="1" step="1" style="font-size: 14px;">
+                <button class="action-btn btn-success" style="width:100%" onclick="saveNewBook()">REGISTER BOOK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Book Pop-up -->
+    <div id="view-book-modal" class="modal-overlay">
+        <div class="modal-box glass-panel modal-lg">
+            <div class="modal-header">
+                <h3>BOOK DETAILS</h3>
+                <i class="fas fa-times close-modal" onclick="closeModal('view-book-modal')"></i>
+            </div>
+            <div class="modal-body">
+                <div id="view-status-badge" class="status-badge-lg">--</div>
+                <div class="detail-group">
+                    <label class="detail-label">TITLE</label>
+                    <h3 id="view-title" class="detail-title">--</h3>
+                </div>
+                <div class="detail-group">
+                    <label class="detail-label">AUTHOR</label>
+                    <div id="view-author" class="detail-value">--</div>
+                </div>
+                <div class="detail-group">
+                    <label class="detail-label">ISBN</label>
+                    <div id="view-isbn" class="detail-value mono-text">--</div>
+                </div>
+                <div class="detail-group">
+                    <label class="detail-label">DATE ADDED</label>
+                    <div id="view-date-added" class="detail-value">--</div>
+                </div>
+                <div class="detail-group">
+                    <label class="detail-label">DESCRIPTION</label>
+                    <p id="view-desc" class="detail-desc">--</p>
+                </div>
+                <div id="view-borrower-section" class="borrower-card hidden">
+                    <label class="borrower-header" id="borrower-header-label">
+                        <i class="fas fa-user-clock"></i> CURRENTLY WITH:
+                    </label>
+                    <p id="view-borrower-name" class="borrower-name">--</p>
+                    <p id="view-borrower-id" class="borrower-sub">--</p>
+                    <p class="borrower-due">Due Date: <span id="view-due-date">--</span></p>
+                </div>
+                
+                <div id="view-damage-section" class="borrower-card hidden" style="background: rgba(255,59,48,0.1); border-left: 3px solid var(--status-no-record);">
+                    <label class="borrower-header" style="color: var(--status-no-record);">
+                        <i class="fas fa-exclamation-triangle"></i> DAMAGE DETAILS:
+                    </label>
+                    <p id="view-damage-details" class="borrower-name" style="word-wrap: break-word; white-space: pre-wrap; overflow-wrap: break-word; font-size: 14px; line-height: 1.6;">--</p>
+                </div>
+                
+                <div class="modal-actions">
+                    <button id="btn-notify-overdue" class="action-btn btn-notify hidden" onclick="notifyBorrower()">
+                        <i class="fas fa-envelope" style="margin-right: 6px; margin-top: 2px; font-size: 20px;"></i> NOTIFY STUDENT
+                    </button>
+                    <button id="btn-update-status" class="action-btn btn-primary hidden" onclick="openUpdateStatusModal()" style="background: var(--accent); border-color: var(--accent);">
+                        <i class="fas fa-sync-alt" style="margin-right: 6px; margin-top: 2px; font-size: 20px;"></i> UPDATE STATUS
+                    </button>
+                    <button class="action-btn btn-danger" onclick="triggerDeleteFromView()">DELETE BOOK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Status Modal -->
+    <div id="update-status-modal" class="modal-overlay">
+        <div class="modal-box glass-panel">
+            <div class="modal-header">
+                <h3 style="color:var(--accent)">UPDATE STATUS</h3>
+                <i class="fas fa-times close-modal" onclick="closeModal('update-status-modal')"></i>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 15px; color: var(--tertiary); font-size: 16px;">Update the status of this lost/damaged book:</p>
+                <select id="update-status-dropdown" style="width: 100%; margin-bottom: 20px; font-size: 14px;">
+                    <option value="">Select new status...</option>
+                    <option value="returned">Returned - Book was found and returned</option>
+                    <option value="paid">Paid - Student paid for the book</option>
+                    <option value="resolved">Resolved - Issue resolved (other)</option>
+                </select>
+
+                <button class="action-btn btn-success" style="width:100%" onclick="confirmUpdateStatus()">UPDATE STATUS</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Book Card Authorization -->
+    <div id="delete-modal" class="modal-overlay">
+        <div class="modal-box glass-panel">
+            <div class="modal-header">
+                <h3 style="color:var(--status-no-record)">AUTHORIZE DELETE</h3>
+                <i class="fas fa-times close-modal" onclick="closeModal('delete-modal')"></i>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom:15px; font-size:14px; color:var(--tertiary)">Please enter admin key to remove this book record.</p>
+                <input type="password" id="admin-key" placeholder="Enter Admin Key" style="font-size: 14px;">
+                <button class="action-btn btn-danger" style="width:100%" onclick="verifyAndOpenConfirm()">VERIFY &
+                    DELETE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Book Card Confirmation -->
+    <div id="final-confirm-modal" class="modal-overlay">
+        <div class="modal-box glass-panel">
+            <div class="modal-body" style="text-align:center;">
+                <i class="fas fa-exclamation-triangle"
+                    style="font-size:40px; color:var(--status-no-record); margin-bottom:12px;"></i>
+                <h3 style="margin-bottom: 12px; font-size: 18px;">ARE YOU SURE?</h3>
+                <p style="font-size:12px; color: var(--tertiary)">This book will be deleted PERMANENTLY!</p>
+                <p id="final-delete-msg" style="font-weight:bold; margin-bottom:20px; color:white;">--</p>
+                <div style="display:flex; gap:10px; justify-content:center;">
+                    <button class="action-btn btn-ghost" onclick="closeModal('final-confirm-modal')">CANCEL</button>
+                    <button class="action-btn btn-danger" onclick="executeDelete()">YES, DELETE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Borrower Modal -->
+    <div id="add-borrower-modal" class="modal-overlay">
+        <div class="modal-box glass-panel">
+            <div class="modal-header">
+                <h3>REGISTER NEW BORROWER</h3>
+                <i class="fas fa-times close-modal" onclick="closeModal('add-borrower-modal')"></i>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="new-borrower-lastname" placeholder="Last Name" style="font-size: 14px;">
+                <input type="text" id="new-borrower-firstname" placeholder="First Name" style="font-size: 14px;">
+                <input type="text" id="new-borrower-middlename" placeholder="Middle Name (optional)" style="font-size: 14px;">
+                <input type="text" id="new-borrower-studentid" placeholder="Student ID Number (e.g., 2023-001)" style="font-size: 14px;">
+                <input type="text" id="new-borrower-course" placeholder="Course & Section (e.g. BSIT 1I)" style="font-size: 14px;">
+                <input type="email" id="new-borrower-email" placeholder="Student Email" style="font-size: 14px;">
+                <input type="text" id="new-borrower-phone" placeholder="Phone Number (e.g. +63-912-345-6789)" style="font-size: 14px;">
+                
+                <button class="action-btn btn-success" style="width:100%" onclick="saveNewBorrower()">REGISTER BORROWER</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Borrower Details Modal -->
+    <div id="view-borrower-modal" class="modal-overlay">
+        <div class="modal-box glass-panel modal-lg">
+            <div class="modal-header">
+                <h3>BORROWER DETAILS</h3>
+                <i class="fas fa-times close-modal" onclick="closeModal('view-borrower-modal')"></i>
+            </div>
+            
+            <div class="modal-body">
+                <div id="view-borrower-status-badge" class="status-badge-lg">--</div>
+
+                <div class="detail-group">
+                    <label class="detail-label">FULL NAME</label>
+                    <h3 id="view-borrower-fullname" class="detail-title">--</h3>
+                </div>
+                
+                <div class="detail-group">
+                    <label class="detail-label">STUDENT ID</label>
+                    <div id="view-borrower-studentid" class="detail-value mono-text">--</div>
+                </div>
+
+                <div class="detail-group">
+                    <label class="detail-label">COURSE & SECTION</label>
+                    <div id="view-borrower-course" class="detail-value">--</div>
+                </div>
+
+                <div class="detail-group">
+                    <label class="detail-label">EMAIL</label>
+                    <div id="view-borrower-email" class="detail-value">--</div>
+                </div>
+
+                <div class="detail-group">
+                    <label class="detail-label">PHONE NUMBER</label>
+                    <div id="view-borrower-phone" class="detail-value">--</div>
+                </div>
+                
+                <div class="detail-group">
+                    <label class="detail-label">DATE REGISTERED</label>
+                    <div id="view-borrower-dateadded" class="detail-value">--</div>
+                </div>
+
+                <div class="detail-group">
+                    <label class="detail-label">CURRENTLY READING</label>
+                    <div id="view-borrower-currentbooks">--</div>
+                </div>
+
+                <div class="detail-group">
+                    <label class="detail-label">READING HISTORY</label>
+                    <div id="view-borrower-pastbooks">--</div>
+                </div>
+
+                <div class="detail-group">
+                    <label class="detail-label">LIBRARY VIOLATIONS</label>
+                    <div id="view-borrower-violations">--</div>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="action-btn btn-danger" onclick="triggerDeleteBorrowerFromView()">DELETE BORROWER</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Borrower Modal (Authorization) -->
+    <div id="delete-borrower-modal" class="modal-overlay">
+        <div class="modal-box glass-panel">
+            <div class="modal-header">
+                <h3 style="color:var(--status-no-record)">AUTHORIZE DELETE</h3>
+                <i class="fas fa-times close-modal" onclick="closeModal('delete-borrower-modal')"></i>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom:15px; font-size:14px; color: var(--tertiary);">Please enter admin key to remove this borrower.</p>
+                <input type="password" id="admin-key-borrower" placeholder="Enter Admin Key" style="font-size: 14px;">
+                <button class="action-btn btn-danger" style="width:100%" onclick="verifyAndConfirmBorrowerDelete()">VERIFY & DELETE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Borrower Confirmation Modal -->
+    <div id="final-confirm-borrower-modal" class="modal-overlay">
+        <div class="modal-box glass-panel">
+            <div class="modal-body" style="text-align:center;">
+                <i class="fas fa-exclamation-triangle" style="font-size:40px; color:var(--status-no-record); margin-bottom:20px;"></i>
+                <h3 style="margin-bottom: 12px; font-size: 18px;">ARE YOU SURE?</h3>
+                <p style="font-size:12px; color: var(--tertiary)">This user will be deleted PERMANENTLY!</p>
+                <p style="margin:10px 0; color:var(--tertiary);"></p>
+                <p id="final-delete-borrower-msg" style="font-weight:bold; margin-bottom:20px; color:white;">--</p>
+                <div style="display:flex; gap:10px; justify-content:center;">
+                    <button class="action-btn btn-ghost" onclick="closeModal('final-confirm-borrower-modal')">CANCEL</button>
+                    <button class="action-btn btn-danger" onclick="executeBorrowerDelete()">YES, DELETE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overdue Books Modal -->
+    <div id="overdue-modal" class="modal-overlay">
+        <div class="modal-box glass-panel modal-lg">
+            <div class="modal-header">
+                <h3 style="color:var(--status-overdue)">OVERDUE BOOKS</h3>
+                <i class="fas fa-times close-modal" onclick="closeModal('overdue-modal')"></i>
+            </div>
+            <div class="modal-body">
+                <button class="action-btn btn-notify" style="width:100%; margin-bottom: 20px;" onclick="notifyAllOverdue()">
+                    <i class="fas fa-bell" style="margin-right: 6px; margin-top: 2px; font-size: 20px;"></i> NOTIFY ALL BORROWERS
+                </button>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th width="35%" style="font-size: 12px;">BOOK TITLE</th>
+                                <th width="25%" style="font-size: 12px;">BORROWER</th>
+                                <th width="20%" style="font-size: 12px;">DUE DATE</th>
+                                <th width="20%" style="font-size: 12px;">DAYS OVERDUE</th>
+                            </tr>
+                        </thead>
+                        <tbody id="overdue-table-body">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Issues Modal -->
+    <div id="issues-modal" class="modal-overlay">
+        <div class="modal-box glass-panel modal-lg">
+            <div class="modal-header">
+                <h3 style="color:var(--status-no-record)">BOOK ISSUES</h3>
+                <i class="fas fa-times close-modal" onclick="closeModal('issues-modal')"></i>
+            </div>
+            <div class="modal-body">
+                <p style="color: var(--tertiary); margin-bottom: 15px; font-size: 14px;">
+                    Books that are lost, damaged, or have other issues.
+                </p>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th width="40%" style="font-size: 12px;">BOOK TITLE</th>
+                                <th width="25%" style="font-size: 12px;">STATUS</th>
+                                <th width="20%" style="font-size: 12px;">LAST TOUCH</th>
+                                <th width="15%" style="font-size: 12px;">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody id="issues-table-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instant Borrow: Due Date Confirmation Modal -->
+    <div id="borrow-duedate-modal" class="modal-overlay">
+        <div class="modal-box glass-panel">
+            <div class="modal-header">
+                <h3>CONFIRM BORROW</h3>
+                <i class="fas fa-times close-modal" onclick="closeModal('borrow-duedate-modal')"></i>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 10px; font-size: 14px;" id="borrow-book-title">Book: --</p>
+                <p style="margin-bottom: 10px; font-size: 14px;" id="borrow-student-name">Borrower: --</p>
+                <p style="margin-bottom: 15px; font-size: 12px; color: var(--status-no-record); font-weight: bold;" id="borrow-violation-notice"></p>
+                
+                <label style="display: block; margin-bottom: 5px; font-size: 12px; color: var(--tertiary);">DUE DATE</label>
+                <input type="date" id="borrow-due-date" style="margin-bottom: 15px;">
+                
+                <button class="action-btn btn-success" style="width:100%" onclick="confirmBorrow()">PROCEED</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instant Borrow: Success Modal -->
+    <div id="borrow-success-modal" class="modal-overlay">
+        <div class="modal-box glass-panel">
+            <div class="modal-body" style="text-align:center;">
+                <i class="fas fa-check-circle" style="font-size:50px; color:var(--status-green); margin-bottom:20px;"></i>
+                <h3 style="margin-bottom: 15px;">BORROW SUCCESSFUL</h3>
+                <p id="borrow-success-message" style="color:var(--tertiary); margin-bottom:20px;">--</p>
+                <button class="action-btn btn-success" onclick="closeModal('borrow-success-modal')">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instant Borrow: Error/Info Modal -->
+    <div id="borrow-error-modal" class="modal-overlay">
+        <div class="modal-box glass-panel">
+            <div class="modal-body" style="text-align:center;">
+                <i class="fas fa-exclamation-triangle" style="font-size:50px; color:var(--status-overdue); margin-bottom:20px;"></i>
+                <h3 style="margin-bottom: 15px;" id="borrow-error-title">NOTICE</h3>
+                <p id="borrow-error-message" style="color:var(--tertiary); margin-bottom:20px;">--</p>
+                <button class="action-btn btn-primary" onclick="closeModal('borrow-error-modal')">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dupe Title Different ISBN Confirmation Modal -->
+    <div id="dupe-title-confirm-modal" class="modal-overlay">
+        <div class="modal-box glass-panel">
+            <div class="modal-body" style="text-align:center;">
+                <i class="fas fa-exclamation-triangle" style="font-size:50px; color:var(--status-borrowed); margin-bottom:20px;"></i>
+                <h3 style="margin-bottom: 15px;">DUPLICATE TITLE DETECTED</h3>
+                <p style="color:var(--tertiary); margin-bottom:20px;">There is already an existing entry under a different ISBN. Are you sure you want to add this?</p>
+                <div style="display:flex; gap:10px; justify-content:center;">
+                    <button class="action-btn btn-ghost" onclick="closeModal('dupe-title-confirm-modal')">NO</button>
+                    <button class="action-btn btn-success" onclick="confirmDupeTitleBook()">YES, ADD ANYWAY</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instant Borrow: New Borrower Prompt -->
+    <div id="new-borrower-prompt-modal" class="modal-overlay">
+        <div class="modal-box glass-panel">
+            <div class="modal-body" style="text-align:center;">
+                <i class="fas fa-user-plus" style="font-size:50px; color:var(--status-new); margin-bottom:20px;"></i>
+                <h3 style="margin-bottom: 15px;">NEW BORROWER</h3>
+                <p style="color:var(--tertiary); margin-bottom:20px;">The borrower is new. Do you want to add borrower to the system?</p>
+                <div style="display:flex; gap:10px; justify-content:center;">
+                    <button class="action-btn btn-ghost" onclick="closeModal('new-borrower-prompt-modal')">NO</button>
+                    <button class="action-btn btn-success" onclick="addNewBorrowerFromBorrow()">YES</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instant Borrow: New Book Prompt -->
+    <div id="new-book-prompt-modal" class="modal-overlay">
+        <div class="modal-box glass-panel">
+            <div class="modal-body" style="text-align:center;">
+                <i class="fas fa-book-medical" style="font-size:50px; color:var(--accent); margin-bottom:20px;"></i>
+                <h3 style="margin-bottom: 15px;">NEW BOOK</h3>
+                <p style="color:var(--tertiary); margin-bottom:20px;">This book is new. Do you want to add book to the system?</p>
+                <div style="display:flex; gap:10px; justify-content:center;">
+                    <button class="action-btn btn-ghost" onclick="closeModal('new-book-prompt-modal')">NO</button>
+                    <button class="action-btn btn-success" onclick="addNewBookFromBorrow()">YES</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instant Return: Success Modal -->
+    <div id="return-success-modal" class="modal-overlay">
+        <div class="modal-box glass-panel">
+            <div class="modal-body" style="text-align:center;">
+                <i class="fas fa-check-circle" style="font-size:50px; color:var(--status-green); margin-bottom:20px;"></i>
+                <h3 style="margin-bottom: 15px;">RETURN SUCCESSFUL</h3>
+                <p id="return-success-message" style="color:var(--tertiary); margin-bottom:20px;">--</p>
+                <button class="action-btn btn-success" onclick="closeModal('return-success-modal')">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instant Return: Error Modal -->
+    <div id="return-error-modal" class="modal-overlay">
+        <div class="modal-box glass-panel">
+            <div class="modal-body" style="text-align:center;">
+                <i class="fas fa-exclamation-circle" style="font-size:50px; color:var(--status-no-record); margin-bottom:20px;"></i>
+                <h3 style="margin-bottom: 15px;">NOT FOUND</h3>
+                <p id="return-error-message" style="color:var(--tertiary); margin-bottom:20px;">--</p>
+                <button class="action-btn btn-primary" onclick="closeModal('return-error-modal')">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Book Modal -->
+    <div id="report-book-modal" class="modal-overlay">
+        <div class="modal-box glass-panel">
+            <div class="modal-header">
+                <h3 style="color:var(--accent);">REPORT BOOK ISSUE</h3>
+                <i class="fas fa-times close-modal" onclick="closeModal('report-book-modal')"></i>
+            </div>
+            <div class="modal-body">
+                <label style="display: block; margin-bottom: 5px; font-size: 12px; color: var(--tertiary);">BOOK NAME</label>
+                <div style="position: relative; margin-bottom: 15px;">
+                    <input type="text" id="report-book-name" placeholder="Enter book name..." style="margin-bottom: 0; padding-right: 80px; font-size: 14px;">
+                    <button class="action-btn btn-ghost" onclick="findByBookName()" style="position: absolute; right: 5px; top: 5px; height: 36px; padding: 0 15px; margin: 0;">FIND
+                    </button>
+                </div>
+
+                <label style="display: block; margin-bottom: 5px; font-size: 12px; color: var(--tertiary);">ISBN</label>
+                <div style="position: relative; margin-bottom: 15px;">
+                    <input type="text" id="report-isbn" placeholder="Enter or auto-fill ISBN..." style="margin-bottom: 0; padding-right: 80px; font-size: 14px;">
+                    <button class="action-btn btn-ghost" onclick="findByISBN()" style="position: absolute; right: 5px; top: 5px; height: 36px; padding: 0 15px; margin: 0;">FIND
+                    </button>
+                </div>
+
+                <!-- NEW: Borrower Dropdown (appears after finding book) -->
+                <div id="borrower-dropdown-container" style="display: none; margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-size: 12px; color: var(--tertiary);">BORROWER</label>
+                    <select id="report-borrower" style="width: 100%;">
+                        <option value="">Select borrower...</option>
+                    </select>
+                </div>
+
+                <label style="display: block; margin-bottom: 5px; font-size: 12px; color: var(--tertiary);">STATUS</label>
+                <select id="report-status" onchange="toggleOtherField()" style="width: 100%; margin-bottom: 15px;">
+                    <option value="">Select issue type...</option>
+                    <option value="lost">Lost / Missing</option>
+                    <option value="torn">Torn Apart</option>
+                    <option value="wet">Wet</option>
+                    <option value="other">Other</option>
+                </select>
+
+                <!-- Field Container for OTHER -->
+                <div id="other-field-container" style="display: none;">
+                    <label style="display: block; margin-bottom: 5px; font-size: 12px; color: var(--tertiary);">SPECIFY OTHER ISSUE</label>
+                    <textarea id="report-other-details" rows="3" placeholder="Describe the issue..." style="margin-bottom: 15px;"></textarea>
+                </div>
+
+                <button class="action-btn btn-success" style="width:100%;" onclick="processReportBook()">PROCESS REPORT</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Book Confirmation Modal -->
+    <div id="report-confirm-modal" class="modal-overlay">
+        <div class="modal-box glass-panel">
+            <div class="modal-header">
+                <h3>CONFIRM REPORT</h3>
+                <i class="fas fa-times close-modal" onclick="closeModal('report-confirm-modal')"></i>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 20px; color: var(--tertiary); font-size: 14px;">Please confirm the details of your report!</p>
+                
+                <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <div style="margin-bottom: 10px;">
+                        <label class="detail-label">BOOK NAME</label>
+                        <div id="confirm-book-name" style="font-weight: bold; color: white;">--</div>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <label class="detail-label">ISBN</label>
+                        <div id="confirm-isbn" style="font-weight: bold; color: white;">--</div>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <label class="detail-label">BORROWER NAME</label>
+                        <div id="confirm-borrower-name" style="font-weight: bold; color: white;">--</div>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <label class="detail-label">ISSUE TYPE</label>
+                        <div id="confirm-status" style="font-weight: bold; color: var(--status-no-record);">--</div>
+                    </div>
+                    <div id="confirm-other-container" style="display: none;">
+                        <label class="detail-label">DETAILS</label>
+                        <div id="confirm-other-details" style="color: var(--tertiary); word-wrap: break-word; white-space: pre-wrap; overflow-wrap: break-word;">--</div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <button class="action-btn btn-ghost" onclick="backToReportModal()" style="flex: 1;">BACK</button>
+                    <button class="action-btn btn-danger" onclick="confirmReportBook()" style="flex: 1;">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/js/dashboard.js"></script>
+</body>
+
+</html>

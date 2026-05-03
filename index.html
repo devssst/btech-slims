@@ -1,0 +1,70 @@
+<!--
+Note from Developer VIEN:
+1. I added some comments to different code blocks so that I can map what is currently functional and what needed to be updated.
+2. I also added README.md so that I can easily see what features to be added 'cause relying only on idea.txt is a bit hassle, I write it freely with what comes to my mind so when I tried to read it, I quickly realize my grammatical error.
+-->
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SLIMS - Login Page</title>
+    <meta name="author" content="Developer VIEN">
+    <link rel="icon" type="image/png" href="assets/images/btech_logo.png">
+    <meta name="description" content="Login page for School Library Inventory Management" />
+    <link rel="stylesheet" href="assets/css/login.css" />
+</head>
+
+<body style="background-image: url(assets/images/library_bg.png); background-size: cover;">
+    <div id="base" class="base">
+        <div class="left-side">
+            <p id="schoolName">DALUBHASAANG POLITEKNIKO NG LUNGSOD NG BALIWAG</p>
+            <h1>SCHOOL LIBRARY INVENTORY MANAGEMENT SYSTEM</h1>
+            <p id="quote">“Despite the enormous quantity of books, how few people read! <br> And if one reads profitably, one would realize how much stupid stuff the vulgar herd is content to swallow every day.”
+                <br> <br> - Voltaire</p>
+        </div>
+
+        <div class="right-side" id="rightSideContainer">
+            <div id="mainContent">
+                <img src="assets/images/btech_logo.png" alt="Dalubhasaang Politekniko ng Lungsod ng Baliwag">
+                <p>To login, use an account authorized by the administrator or the institution.</p>
+                <button id="showLoginBtn" class="primary-btn">GO TO LOGIN</button>
+            </div>
+
+            <!-- Login Card -->
+            <div id="loginCard" class="login-card" style="display: none;">
+                <h1>ADMINISTRATOR LOGIN</h1>
+                <form id="loginForm">
+                    <div class="input-group">
+                        <label for="email" style="font-weight: 400; font-size: 12px;">EMAIL</label>
+                        <input type="email" id="email" placeholder="your@school.email.ph" style="font-size: 14px;" required />
+                    </div>
+                    <div class="input-group">
+                        <label for="password" style="font-weight: 400; font-size: 12px;">PASSWORD</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="password" placeholder="••••••••" style="font-size: 14px;" required />
+                            <span id="togglePassword" class="toggle-text">SHOW</span>
+                        </div>
+                    </div>
+                    <button type="submit">AUTHORIZE</button>
+                    <div class="divider">OR</div>
+
+                    <!-- Social Login Placeholders -->
+                    <div class="social-login">
+                        <div class="social-btn" id="google-btn"><img src="assets/images/google.png" alt="Google Logo"></div>
+                        <div class="social-btn" id="microsoft-btn"><img src="assets/images/microsoft.png" alt="Microsoft Logo"></div>
+                    </div>
+                    <div class="footer"><span class="footer-text">Can't remember email or password?</span><a href="#"
+                            class="forgot-link" id="forgot-btn">FORGOT</a></div>
+                    <div class="footer1" id="btMain"><a href="#" id="backToMain">BACK TO HOME</a></div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/auth.js"></script>
+</body>
+
+</html>
