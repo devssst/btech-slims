@@ -1,0 +1,5 @@
+{
+    "name": "SLIMS",
+    "banner": "assets/images/banner.png",
+    "contributions": "I built a front-end site from the scratch. Create a login UI form, and also build a dashboard with all it's features such as borrow/return, report, list of books/borrowers, sorting systems for various terms such as book/borrower status, dropdowns, and search functionality."
+}
