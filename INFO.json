@@ -2,6 +2,7 @@
     "id": "PR-001",
     "name": "STUDENT LIBRARY INVENTORY MANAGEMENT SYSTEM",
     "year": 2026,
+    "date": "2026-01",
     "description": "A web-based library system for librarians, and admins to simplify their works. ",
     "about": "It is a front-end (for now) web-based library management system that tracks borrower, borrowed, lost, damaged, returned, available books. It also has a built-in report book for students who always forgot where they put their book and a sorting system for librarians so they can easily see what borrowed, available and reported missing. ",
     "contributions": "I built this website from scratch as part of the submission in our PT101 subject. It is aligned with the goal of hassle-free, smooth transaction, and faster book logging. Just to reduce the burden of librarians.",
